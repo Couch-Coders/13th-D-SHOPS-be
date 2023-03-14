@@ -1,1 +1,1 @@
-java -Dserver.port=$PORT $JAVA_OPTS -Dspring.profiles.actice=prod -jar ./build/libs/demo-0.0.1-SNAPSHOT.jar
+java -Dserver.port=$PORT $JAVA_OPTS  -jar ./build/libs/{application_name}-0.0.1-SNAPSHOT.jar
