@@ -1,6 +1,5 @@
 package com.example.demo.exception;
 
-import com.google.firebase.ErrorCode;
 import lombok.Getter;
 
 @Getter

@@ -81,12 +81,12 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
     }
 
     protected String findCookie(Cookie[] cookies, String cookieName) {
-//        for (Cookie c : cookies) {
-//            if (c.getName().equals(cookieName)) {
-//                log.info(cookieName + " : " + c.getValue());
-//                return c.getValue();
-//            }
-//        }
+        for (Cookie c : cookies) {
+            if (c.getName().equals(cookieName)) {
+                log.info(cookieName + " : " + c.getValue());
+                return c.getValue();
+            }
+        }
         return null;
     }
 

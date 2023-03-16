@@ -44,13 +44,13 @@ public class SecureConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring();
-//                .requestMatchers(HttpMethod.GET, "/users/me")
-//                .requestMatchers("/favicon.ico")
-//                .requestMatchers("/hello")
-//                .requestMatchers(HttpMethod.GET, "/stores/*/reviews")
-//                .requestMatchers(HttpMethod.GET, "/stores")
-//                .requestMatchers(HttpMethod.GET, "/stores/*");
+        return web -> web.ignoring()
+                .requestMatchers(HttpMethod.GET, "/users/me")
+                .requestMatchers("/favicon.ico")
+                .requestMatchers("/hello")
+                .requestMatchers(HttpMethod.GET, "/stores/*/reviews")
+                .requestMatchers(HttpMethod.GET, "/stores")
+                .requestMatchers(HttpMethod.GET, "/stores/*");
 
 //        return web -> web.ignoring()
 //                .antMatchers(HttpMethod.GET, "/users/me")

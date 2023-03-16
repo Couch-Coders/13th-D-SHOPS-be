@@ -23,14 +23,14 @@ public class UserService implements UserDetailsService {
 //                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER, "존재하지 않는 유저입니다."));
 //    }
     public User getUser(String email) {
-        return userRepository.findByEmail(email).orElseThrow();
-//                        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER, "존재하지 않는 유저입니다."));
+        return userRepository.findByEmail(email)//.orElseThrow()
+                        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER, "존재하지 않는 유저입니다."));
     }
 
     public User getActiveUser(String email) {
         User user = getUser(email);
-//        if (!user.isActiveUser())
-//            throw new CustomException(ErrorCode.NOT_CORRECT_USER, "비활성화 유저입니다. 다시 로그인 해주세요");
+        if (!user.isActiveUser())
+            throw new CustomException(ErrorCode.NOT_CORRECT_USER, "비활성화 유저입니다. 다시 로그인 해주세요");
         return user;
     }
 
