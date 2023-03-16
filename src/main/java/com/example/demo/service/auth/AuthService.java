@@ -36,6 +36,7 @@ public abstract class AuthService {
     public User loginOrEntry(FirebaseTokenDTO tokenDTO) {
         User user = null;
         try {
+            log.error(tokenDTO.getEmail());
             user = userService.getUser(tokenDTO.getEmail());
             if (!user.isActiveUser()) {
                 log.error("User \"" + user.getEmail() + "\" is not active user. activating user \"" + user.getEmail() + "\"");
