@@ -47,7 +47,7 @@ public class SecureConfig {
         return web -> web.ignoring()
                 .requestMatchers(HttpMethod.GET, "/users/me")
                 .requestMatchers("/favicon.ico")
-                .requestMatchers(HttpMethod.GET,"/hello")
+                .requestMatchers("/hello")
                 .requestMatchers(HttpMethod.GET, "/stores/*/reviews")
                 .requestMatchers(HttpMethod.GET, "/stores")
                 .requestMatchers(HttpMethod.GET, "/stores/*");

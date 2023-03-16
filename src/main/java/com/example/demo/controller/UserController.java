@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     @GetMapping("/hello")
         public String hello() {
-            return "hello_20230316";
+            return "hello_20230316_21:30";
         }
 
 
