@@ -77,4 +77,7 @@ public class UserController {
                 .path("/")
                 .build();
     }
+
+    @GetMapping("/me/{id}")
+    public User getUser(@PathVariable Long id) { return userService.getUser(id);}
 }
