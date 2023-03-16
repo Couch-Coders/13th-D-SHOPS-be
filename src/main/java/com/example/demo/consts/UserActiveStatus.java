@@ -1,2 +1,5 @@
-package com.example.demo.consts;public class UserActiveStatus {
+package com.example.demo.consts;
+
+public enum UserActiveStatus {
+    ACTIVE, NOT_ACTIVE;
 }

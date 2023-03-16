@@ -1,9 +1,12 @@
+// https://www.couchcoding.kr/blogs/couchcoding/Firebase로 Google 로그인 구현하기 2 (Spring 파트)
+// firebase.json 이란 이름으로 설정파일 프로젝트 최상단에 추가
 package com.example.demo.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
