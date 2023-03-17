@@ -7,6 +7,8 @@ import com.example.demo.exception.CustomException;
 import com.example.demo.exception.ErrorCode;
 import com.example.demo.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,8 +19,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
+
+@Slf4j
 @Service
 @AllArgsConstructor
+//@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     UserRepository userRepository;
@@ -67,20 +72,32 @@ public class UserService implements UserDetailsService {
     @Transactional // 트랜젝셕
     public User modifyUser(UserDTO userDTO) {
 //        if (userDTO.getName() == null || userDTO.getName().equals(""))
-        if (userDTO.getUserEntryNo() == null)
+        if (userDTO.getUserEntryNo() == null || userDTO.getName().equals(""))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자 id가 비었습니다.");
 
         Optional<User> userOptional = userRepository.findById(userDTO.getUserEntryNo());
         if (!userOptional.isPresent())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자가 존재하지 않습니다.");
+        log.info("userOptional: "+userOptional);
 
+        // 넘어온것만 수정할 수 있을까?
         User user = User.builder()
-                .userEntryNo(userDTO.getUserEntryNo())
+                .userEntryNo(userOptional.get().getUserEntryNo())
+                .email(userOptional.get().getEmail())
+                .registeredDate(userOptional.get().getRegisteredDate())
+                .userActiveStatus(userOptional.get().getUserActiveStatus())
+                .name(userDTO.getName())
+                .phone(userDTO.getPhone())
 //                . .name(memoDTO.getName())
 //                .content(memoDTO.getContent())
 //                .category(memoOptional.get().getCategory())
                 .build();
-
         return userRepository.save(user);
     }
+
+//    @Transactional
+//    public Long save(UserDTO userDTO){
+//        return userRepository.save(userDTO.toEntiry()).getId();
+//    }
+
 }

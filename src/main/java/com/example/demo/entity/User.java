@@ -26,6 +26,10 @@ public class User implements UserDetails {
 
     @Column
     String email;
+    @Column
+    String name;
+    @Column
+    String phone;
 
     @CreatedDate
     Date registeredDate;
@@ -39,9 +43,11 @@ public class User implements UserDetails {
     String uid;
 
     @Builder
-    public User(Long userEntryNo, String email, Date registeredDate, UserActiveStatus userActiveStatus) {
+    public User(Long userEntryNo, String email, String name, String phone, Date registeredDate, UserActiveStatus userActiveStatus) {
         this.userEntryNo = userEntryNo;
         this.email = email;
+        this.name = name;
+        this.phone = phone;
         this.registeredDate = registeredDate;
         this.userActiveStatus = userActiveStatus;
     }

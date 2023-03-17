@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.consts.AuthConsts;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.User;
 import com.example.demo.service.auth.AuthService;
 import com.example.demo.service.UserService;
 import com.google.firebase.auth.FirebaseAuthException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +23,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
     @Autowired
@@ -28,6 +31,8 @@ public class UserController {
 
     @Autowired
     AuthService authService;
+
+    //private final UserService userService;
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable Long id) {
@@ -49,6 +54,14 @@ public class UserController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, removeCookie(AuthConsts.accessTokenKey).toString())
                 .build();
+    }
+
+    // 회원 정보 수정
+    @PutMapping("/me")
+    public User modifyUser(@RequestBody UserDTO userDTO, @AuthenticationPrincipal User user) {
+        userDTO.setUserEntryNo(user.getUserEntryNo());
+        return userService.modifyUser(userDTO);
+        //return userService.save(userDTO);
     }
 
     public ResponseCookie removeCookie(String key){
