@@ -1,14 +1,18 @@
 package com.example.demo.service;
 
 import com.example.demo.consts.UserActiveStatus;
+import com.example.demo.dto.CompanyDTO;
 import com.example.demo.dto.UserDTO;
+import com.example.demo.entity.Company;
 import com.example.demo.entity.User;
 import com.example.demo.exception.CustomException;
 import com.example.demo.exception.ErrorCode;
+import com.example.demo.repository.CompanyRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,6 +32,9 @@ public class UserService implements UserDetailsService {
 
     UserRepository userRepository;
 
+    @Autowired
+    private CompanyRepository companyRepository;
+
     public User getUser(String email) {
         return userRepository.findByEmail(email)//.orElseThrow()
                         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER, "존재하지 않는 유저입니다."));
@@ -43,6 +50,7 @@ public class UserService implements UserDetailsService {
     public User addUser(String email) {
         User user = User.builder()
                 .email(email)
+                .company(null)
                 .userActiveStatus(UserActiveStatus.ACTIVE)
                 .build();
         return userRepository.save(user);
@@ -80,7 +88,40 @@ public class UserService implements UserDetailsService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자가 존재하지 않습니다.");
         log.info("userOptional: "+userOptional);
 
+        Company existingCompany = userOptional.get().getCompany();
+        Company updatedCompany = userDTO.getCompany();
+
+        User existingUser = userOptional.get();
+
+        if (existingCompany == null && updatedCompany != null) {
+            log.info("Enter1");
+            // 없으면 받은거 저장
+            //updatedCompany.setUser(userOptional);
+//            updatedCompany.setUser(updatedCompany.getUser());
+//            userDTO.setCompany(updatedCompany);
+        }
+        else if (existingCompany != null && updatedCompany != null) {
+            // 기존것이 있으면 수정해라
+            log.info("Enter2");
+            //입력이 없으면 수정 안하게
+            if(updatedCompany.getName() != null)
+                existingCompany.setName(updatedCompany.getName());
+            if(updatedCompany.getEmail() != null)
+                existingCompany.setEmail(updatedCompany.getEmail());
+            if(updatedCompany.getPhone() != null)
+                existingCompany.setPhone(updatedCompany.getPhone());
+
+            userDTO.setCompany(existingCompany);
+        }
+
         // 넘어온것만 수정할 수 있을까?
+        // 성공
+        // 조금더 쉬운 방법 없을까?
+        if(userDTO.getName() == null)
+            userDTO.setName(existingUser.getName());
+        if(userDTO.getPhone() == null)
+            userDTO.setPhone(existingUser.getPhone());
+
         User user = User.builder()
                 .userEntryNo(userOptional.get().getUserEntryNo())
                 .email(userOptional.get().getEmail())
@@ -88,16 +129,9 @@ public class UserService implements UserDetailsService {
                 .userActiveStatus(userOptional.get().getUserActiveStatus())
                 .name(userDTO.getName())
                 .phone(userDTO.getPhone())
-//                . .name(memoDTO.getName())
-//                .content(memoDTO.getContent())
-//                .category(memoOptional.get().getCategory())
+                .company(userDTO.getCompany())
                 .build();
+
         return userRepository.save(user);
     }
-
-//    @Transactional
-//    public Long save(UserDTO userDTO){
-//        return userRepository.save(userDTO.toEntiry()).getId();
-//    }
-
 }
