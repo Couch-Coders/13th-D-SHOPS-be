@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
-@Entity(name = "address")
+@Entity(name = "cs_address")
 @Getter
 @Setter
 @DynamicInsert //@ColumnDefault("'N'") 할려고

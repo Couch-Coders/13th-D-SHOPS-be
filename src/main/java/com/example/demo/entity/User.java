@@ -15,8 +15,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 //import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
-@Entity(name = "users")
+@Entity(name = "ds_user")
 @ToString
 @Getter
 @Setter
@@ -41,6 +42,9 @@ public class User extends BaseEntiry implements UserDetails {
 //    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 //    @JoinColumn(name = "company_seq")
     private Company company;
+
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<Product> products;
 
     @Getter
     @Setter
