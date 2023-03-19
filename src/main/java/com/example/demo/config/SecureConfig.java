@@ -1,3 +1,4 @@
+// 로그인 유저만 접근 가능하게 처리하기
 package com.example.demo.config;
 
 import com.example.demo.filter.FirebaseTokenFilter;
@@ -45,8 +46,11 @@ public class SecureConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                .requestMatchers(HttpMethod.GET, "/users/me")
+                //로그인 url 은 아무나 볼 수 있게 하기
+                .requestMatchers(HttpMethod.GET, "/auth")
+                .requestMatchers(HttpMethod.POST, "/auth")
                 .requestMatchers("/favicon.ico")
+                //테스트 url 은 아무나 볼 수 있게 하기
                 .requestMatchers("/hello")
                 .requestMatchers(HttpMethod.GET, "/stores/*/reviews")
                 .requestMatchers(HttpMethod.GET, "/stores")

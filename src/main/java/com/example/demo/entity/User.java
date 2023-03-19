@@ -18,14 +18,19 @@ import java.util.Date;
 @Entity(name = "users")
 @ToString
 @Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long userEntryNo;
 
     @Column
     String email;
+    @Column
+    String name;
+    @Column
+    String phone;
 
     @CreatedDate
     Date registeredDate;
@@ -33,17 +38,26 @@ public class User implements UserDetails {
     @Column
     UserActiveStatus userActiveStatus;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_seq", referencedColumnName = "seq")
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+//    @JoinColumn(name = "company_seq")
+    private Company company;
+
     @Getter
     @Setter
     @Transient
     String uid;
 
     @Builder
-    public User(Long userEntryNo, String email, Date registeredDate, UserActiveStatus userActiveStatus) {
+    public User(Long userEntryNo, String email, String name, String phone, Date registeredDate, UserActiveStatus userActiveStatus, Company company) {
         this.userEntryNo = userEntryNo;
         this.email = email;
+        this.name = name;
+        this.phone = phone;
         this.registeredDate = registeredDate;
         this.userActiveStatus = userActiveStatus;
+        this.company = company;
     }
 
     public User() {
