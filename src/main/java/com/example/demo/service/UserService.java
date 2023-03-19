@@ -80,10 +80,10 @@ public class UserService implements UserDetailsService {
     @Transactional // 트랜젝셕
     public User modifyUser(UserDTO userDTO) {
 //        if (userDTO.getName() == null || userDTO.getName().equals(""))
-        if (userDTO.getUserEntryNo() == null || userDTO.getName().equals(""))
+        if (userDTO.getSeq() == null || userDTO.getName().equals(""))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자 id가 비었습니다.");
 
-        Optional<User> userOptional = userRepository.findById(userDTO.getUserEntryNo());
+        Optional<User> userOptional = userRepository.findById(userDTO.getSeq());
         if (!userOptional.isPresent())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자가 존재하지 않습니다.");
         log.info("userOptional: "+userOptional);
@@ -123,7 +123,7 @@ public class UserService implements UserDetailsService {
             userDTO.setPhone(existingUser.getPhone());
 
         User user = User.builder()
-                .userEntryNo(userOptional.get().getUserEntryNo())
+                .seq(userOptional.get().getSeq())
                 .email(userOptional.get().getEmail())
                 .registeredDate(userOptional.get().getRegisteredDate())
                 .userActiveStatus(userOptional.get().getUserActiveStatus())
