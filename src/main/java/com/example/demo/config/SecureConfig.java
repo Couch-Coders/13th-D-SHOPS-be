@@ -49,6 +49,7 @@ public class SecureConfig {
                 //로그인 url 은 아무나 볼 수 있게 하기
                 .requestMatchers(HttpMethod.GET, "/auth")
                 .requestMatchers(HttpMethod.POST, "/auth")
+                .requestMatchers(HttpMethod.GET, "/auth/not")
                 .requestMatchers("/favicon.ico")
                 //테스트 url 은 아무나 볼 수 있게 하기
                 .requestMatchers("/hello")

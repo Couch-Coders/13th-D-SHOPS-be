@@ -13,15 +13,18 @@ import org.springframework.stereotype.Service;
 public class InterAuthService extends AuthService {
     public InterAuthService(UserService userService) {
         super(userService);
+        log.info("====================InterAuthService====================");
     }
 
     @Override
     public FirebaseTokenDTO verifyIdToken(String bearerToken) {
+        log.info("====================verifyIdToken====================");
         return new FirebaseTokenDTO("uid-1", "name-1", "admin@gmail.com", "picture-sample");
     }
 
     @Override
     public void revokeRefreshTokens(String uid) throws FirebaseAuthException {
+        log.info("====================revokeRefreshTokens====================");
         log.info("revoke token : {}", uid);
     }
 }

@@ -21,10 +21,12 @@ public class ProdAuthService extends AuthService {
     public ProdAuthService(FirebaseAuth firebaseAuth, UserService userService) {
         super(userService);
         this.firebaseAuth = firebaseAuth;
+        log.info("====================ProdAuthService====================");
     }
 
     @Override
     public FirebaseTokenDTO verifyIdToken(String bearerToken) {
+        log.info("====================FirebaseTokenDTO====================");
         try {
             FirebaseToken token = firebaseAuth.verifyIdToken(bearerToken);
             FirebaseTokenDTO tokenDTO = new FirebaseTokenDTO(token);
@@ -39,6 +41,7 @@ public class ProdAuthService extends AuthService {
 
     @Override
     public void revokeRefreshTokens(String uid) {
+        log.info("====================revokeRefreshTokens====================");
         try {
             firebaseAuth.revokeRefreshTokens(uid);
         } catch (FirebaseAuthException e) {

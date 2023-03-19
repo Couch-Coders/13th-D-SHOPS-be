@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,12 +20,9 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
+@DynamicInsert //@ColumnDefault("'N'") 할려고
 @EntityListeners(AuditingEntityListener.class)
-public class User implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long userEntryNo;
-
+public class User extends BaseEntiry implements UserDetails {
     @Column
     String email;
     @Column
@@ -50,8 +48,8 @@ public class User implements UserDetails {
     String uid;
 
     @Builder
-    public User(Long userEntryNo, String email, String name, String phone, Date registeredDate, UserActiveStatus userActiveStatus, Company company) {
-        this.userEntryNo = userEntryNo;
+    public User(Long seq, String email, String name, String phone, Date registeredDate, UserActiveStatus userActiveStatus, Company company) {
+        this.seq = seq;
         this.email = email;
         this.name = name;
         this.phone = phone;

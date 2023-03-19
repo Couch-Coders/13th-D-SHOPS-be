@@ -34,6 +34,7 @@ public abstract class AuthService {
     public abstract void revokeRefreshTokens(String uid) throws FirebaseAuthException;
 
     public User loginOrEntry(FirebaseTokenDTO tokenDTO) {
+        log.info("====================loginOrEntry====================");
         User user = null;
         try {
             log.error(tokenDTO.getEmail());
