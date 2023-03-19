@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CompanyDTO {
-    private Long seq;
+public class CompanyDTO extends BaseEntiryDTO{
     private String name;
     private String email;
     private String phone;

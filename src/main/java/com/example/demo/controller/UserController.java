@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.consts.AuthConsts;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.User;
+import com.example.demo.repository.CompanyRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.auth.AuthService;
 import com.example.demo.service.UserService;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -10,14 +12,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -72,5 +73,14 @@ public class UserController {
                 .secure(true)
                 .path("/")
                 .build();
+    }
+
+    //sql 테스트
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/not")
+    public List<User> getNotDeletedUser(){
+        return userRepository.findAllNotDeleted();
     }
 }

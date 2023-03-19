@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import com.example.demo.entity.BaseEntiry;
 import com.example.demo.entity.Company;
 import com.example.demo.entity.User;
 import lombok.AccessLevel;
@@ -12,8 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserDTO {
-    Long seq;
+public class UserDTO extends BaseEntiryDTO {
     String email;
     String name;
     String phone;

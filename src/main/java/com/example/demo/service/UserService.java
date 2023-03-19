@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -37,12 +38,18 @@ public class UserService implements UserDetailsService {
     @Autowired
     private CompanyRepository companyRepository;
 
+//    public List<User> getAll(){
+//        return userRepository.findAllNotDeleted1();
+//    }
+
     public User getUser(String email) {
+        log.info("====================getUser====================");
         return userRepository.findByEmail(email)//.orElseThrow()
                         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER, "존재하지 않는 유저입니다."));
     }
 
     public User getActiveUser(String email) {
+        log.info("====================getActiveUser====================");
         User user = getUser(email);
         if (!user.isActiveUser())
             throw new CustomException(ErrorCode.NOT_CORRECT_USER, "비활성화 유저입니다. 다시 로그인 해주세요");
@@ -50,6 +57,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User addUser(String email) {
+        log.info("====================addUser====================");
         User user = User.builder()
                 .email(email)
                 .company(null)
@@ -60,21 +68,25 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void deleteUser(String email) {
+        log.info("====================deleteUser====================");
         User user = getUser(email);
         user.deactivateUser();
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        log.info("====================UserDetails====================");
         return userRepository.findByEmail(email).orElse(null);
     }
 
     @Transactional
     public void activateUser(User user) {
+        log.info("====================activateUser====================");
         user.activateUser();
     }
 
     public User getUser(Long id) {
+        log.info("====================getUser====================");
         return userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER, "존재하지 않는 유저입니다."));
     }
@@ -123,6 +135,18 @@ public class UserService implements UserDetailsService {
                 //입력이 없으면 수정 안하게
                 if(updatedAddress.getName() != null)
                     existingAddress.setName(updatedAddress.getName());
+                if(updatedAddress.getPost_code() != null)
+                    existingAddress.setPost_code(updatedAddress.getPost_code());
+                if(updatedAddress.getAddress() != null)
+                    existingAddress.setAddress(updatedAddress.getAddress());
+                if(updatedAddress.getExtra() != null)
+                    existingAddress.setExtra(updatedAddress.getExtra());
+                if(updatedAddress.getDetail() != null)
+                    existingAddress.setDetail(updatedAddress.getDetail());
+                if(updatedAddress.getLocation_x() != null)
+                    existingAddress.setLocation_x(updatedAddress.getLocation_x());
+                if(updatedAddress.getLocation_y() != null)
+                    existingAddress.setLocation_y(updatedAddress.getLocation_y());
 
                 existingCompany.setAddress(existingAddress);
             }
@@ -135,21 +159,34 @@ public class UserService implements UserDetailsService {
         // 넘어온것만 수정할 수 있을까?
         // 성공
         // 조금더 쉬운 방법 없을까?
-        if(userDTO.getName() == null)
-            userDTO.setName(existingUser.getName());
-        if(userDTO.getPhone() == null)
-            userDTO.setPhone(existingUser.getPhone());
+//        if(userDTO.getName() == null)
+//            userDTO.setName(existingUser.getName());
+//        if(userDTO.getPhone() == null)
+//            userDTO.setPhone(existingUser.getPhone());
 
-        User user = User.builder()
-                .seq(userOptional.get().getSeq())
-                .email(userOptional.get().getEmail())
-                .registeredDate(userOptional.get().getRegisteredDate())
-                .userActiveStatus(userOptional.get().getUserActiveStatus())
-                .name(userDTO.getName())
-                .phone(userDTO.getPhone())
-                .company(userDTO.getCompany())
-                .build();
+//        User user = User.builder()
+//                .seq(userOptional.get().getSeq())
+//                .email(userOptional.get().getEmail())
+//                .registeredDate(userOptional.get().getRegisteredDate())
+//                .userActiveStatus(userOptional.get().getUserActiveStatus())
+//                .name(userDTO.getName())
+//                .phone(userDTO.getPhone())
+//                .company(userDTO.getCompany())
+//                .build();
+//        return userRepository.save(user);
 
-        return userRepository.save(user);
+        User myexistingUser = userRepository.findById(userDTO.getSeq())
+                .orElseThrow(() ->new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자가 존재하지 않습니다."));
+
+        if(userDTO.getName() != null)
+            myexistingUser.setName(userDTO.getName());
+        if(userDTO.getPhone() != null)
+            myexistingUser.setPhone(userDTO.getPhone());
+        if(userDTO.getCompany() != null)
+            myexistingUser.setCompany(userDTO.getCompany());
+
+
+        return userRepository.save(myexistingUser);
     }
+
 }
