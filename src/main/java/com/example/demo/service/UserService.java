@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.consts.UserActiveStatus;
 import com.example.demo.dto.CompanyDTO;
 import com.example.demo.dto.UserDTO;
+import com.example.demo.entity.Address;
 import com.example.demo.entity.Company;
 import com.example.demo.entity.User;
 import com.example.demo.exception.CustomException;
@@ -30,6 +31,7 @@ import java.util.Optional;
 //@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
+    @Autowired
     UserRepository userRepository;
 
     @Autowired
@@ -80,29 +82,25 @@ public class UserService implements UserDetailsService {
     @Transactional // 트랜젝셕
     public User modifyUser(UserDTO userDTO) {
 //        if (userDTO.getName() == null || userDTO.getName().equals(""))
-        if (userDTO.getUserEntryNo() == null || userDTO.getName().equals(""))
+        if (userDTO.getSeq() == null || userDTO.getName().equals(""))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자 id가 비었습니다.");
 
-        Optional<User> userOptional = userRepository.findById(userDTO.getUserEntryNo());
+        Optional<User> userOptional = userRepository.findById(userDTO.getSeq());
         if (!userOptional.isPresent())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자가 존재하지 않습니다.");
         log.info("userOptional: "+userOptional);
 
+        // company 처리
         Company existingCompany = userOptional.get().getCompany();
         Company updatedCompany = userDTO.getCompany();
 
-        User existingUser = userOptional.get();
-
         if (existingCompany == null && updatedCompany != null) {
-            log.info("Enter1");
+            log.info("Company Enter1");
             // 없으면 받은거 저장
-            //updatedCompany.setUser(userOptional);
-//            updatedCompany.setUser(updatedCompany.getUser());
-//            userDTO.setCompany(updatedCompany);
         }
         else if (existingCompany != null && updatedCompany != null) {
             // 기존것이 있으면 수정해라
-            log.info("Enter2");
+            log.info("Company Enter2");
             //입력이 없으면 수정 안하게
             if(updatedCompany.getName() != null)
                 existingCompany.setName(updatedCompany.getName());
@@ -111,9 +109,29 @@ public class UserService implements UserDetailsService {
             if(updatedCompany.getPhone() != null)
                 existingCompany.setPhone(updatedCompany.getPhone());
 
+            // address 처리
+            Address existingAddress = existingCompany.getAddress();
+            Address updatedAddress = updatedCompany.getAddress();
+
+
+            if (existingAddress == null && updatedAddress != null) {
+                log.info("Address Enter1");
+            }
+            else if (existingAddress != null && updatedAddress != null) {
+                // 기존것이 있으면 수정해라
+                log.info("Address Enter2");
+                //입력이 없으면 수정 안하게
+                if(updatedAddress.getName() != null)
+                    existingAddress.setName(updatedAddress.getName());
+
+                existingCompany.setAddress(existingAddress);
+            }
+
             userDTO.setCompany(existingCompany);
         }
 
+        // user 처리
+        User existingUser = userOptional.get();
         // 넘어온것만 수정할 수 있을까?
         // 성공
         // 조금더 쉬운 방법 없을까?
@@ -123,7 +141,7 @@ public class UserService implements UserDetailsService {
             userDTO.setPhone(existingUser.getPhone());
 
         User user = User.builder()
-                .userEntryNo(userOptional.get().getUserEntryNo())
+                .seq(userOptional.get().getSeq())
                 .email(userOptional.get().getEmail())
                 .registeredDate(userOptional.get().getRegisteredDate())
                 .userActiveStatus(userOptional.get().getUserActiveStatus())

@@ -43,7 +43,7 @@ public class UserController {
     @GetMapping("/me")
     public User getUser(@AuthenticationPrincipal User user) {
         log.info("getUser " + user);
-        return userService.getUser(user.getUserEntryNo());
+        return userService.getUser(user.getSeq());
     }
 
     // 회원 탈퇴
@@ -59,7 +59,7 @@ public class UserController {
     // 회원 정보 수정
     @PutMapping("/me")
     public User modifyUser(@RequestBody UserDTO userDTO, @AuthenticationPrincipal User user) {
-        userDTO.setUserEntryNo(user.getUserEntryNo());
+        userDTO.setSeq(user.getSeq());
         return userService.modifyUser(userDTO);
         //return userService.save(userDTO);
     }

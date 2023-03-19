@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Entity
+@Entity(name = "company")
 @Getter
 @Setter
 public class Company {
@@ -19,6 +19,9 @@ public class Company {
     private String name;
     private String email;
     private String phone;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_seq", referencedColumnName = "seq")
+    private Address address;
 
     //@OneToOne(mappedBy = "company")
 //    @JoinColumn(name = "user_seq")

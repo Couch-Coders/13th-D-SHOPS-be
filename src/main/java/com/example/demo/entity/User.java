@@ -23,7 +23,7 @@ import java.util.Date;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long userEntryNo;
+    Long seq;
 
     @Column
     String email;
@@ -50,8 +50,8 @@ public class User implements UserDetails {
     String uid;
 
     @Builder
-    public User(Long userEntryNo, String email, String name, String phone, Date registeredDate, UserActiveStatus userActiveStatus, Company company) {
-        this.userEntryNo = userEntryNo;
+    public User(Long seq, String email, String name, String phone, Date registeredDate, UserActiveStatus userActiveStatus, Company company) {
+        this.seq = seq;
         this.email = email;
         this.name = name;
         this.phone = phone;
