@@ -67,6 +67,7 @@ public class ProductController {
         return productRepository.save(existingProduct);
     }
 
+    //품목 삭제
     @DeleteMapping("/{seq}")
     public  String deleteProduct(@PathVariable Long seq){
         productRepository.deleteById(seq);
