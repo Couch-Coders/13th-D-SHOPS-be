@@ -34,12 +34,14 @@ public class ProductController {
         return productService.getProduct(seq);
     }
 
+    //품목 등록
     @PostMapping("")
     public Product addProducts(@RequestBody Product product, @AuthenticationPrincipal User user){
         product.setUser_seq(user.getSeq());
         return productRepository.save(product);
     }
 
+    //품목 수정
     @PutMapping("")
     public Product modifyProducts(@RequestBody Product product, @AuthenticationPrincipal User user){
         if(product.getName() == null || product.equals(""))
