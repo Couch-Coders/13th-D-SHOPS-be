@@ -32,7 +32,6 @@ public class ProductController {
     @GetMapping("/{seq}")
     public Product getProduct(@PathVariable Long seq){
         return productService.getProduct(seq);
-        //return productRepository.findById(seq);
     }
 
     @PostMapping("")
