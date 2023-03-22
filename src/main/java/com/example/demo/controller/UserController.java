@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.consts.AuthConsts;
 import com.example.demo.dto.UserDTO;
+import com.example.demo.entity.Image;
 import com.example.demo.entity.User;
 import com.example.demo.repository.CompanyRepository;
 import com.example.demo.repository.UserRepository;
@@ -16,7 +17,9 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,8 +82,31 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    // 지운 사람 가져오기 테스트
     @GetMapping("/not")
     public List<User> getNotDeletedUser(){
         return userRepository.findAllNotDeleted();
+    }
+
+    @PostMapping("/me/image/upload")//,consumes = {"multipart/form-data"}
+    //,@AuthenticationPrincipal User user
+//    public Image uploadImage(@RequestParam MultipartFile files,@AuthenticationPrincipal User user) throws IOException {
+    public Image uploadImage(@RequestParam MultipartFile files) throws IOException {
+        Image image = new Image();
+        image.setUser_seq(1L);
+//        image.setUser_seq(user.getSeq());
+//    public String uploadImage(){
+//        return "myImage";
+        log.info("================uploadImage================");
+        log.info(files.getOriginalFilename());
+        image.setName(files.getOriginalFilename());
+//        return image;
+//        return "uploadImage - ok";
+        return userService.uploadImage(image,files.getBytes());
+    }
+
+    @GetMapping("/me/{uid}/profile.jpg")
+    public byte[] downloadProfile(@PathVariable String uid) {
+        return userService.getProfile(uid);
     }
 }

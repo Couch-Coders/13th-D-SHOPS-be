@@ -1,18 +1,24 @@
 package com.example.demo.service;
 
+import java.io.IOException;
+import java.util.Optional;
+
 import com.example.demo.consts.UserActiveStatus;
-import com.example.demo.dto.CompanyDTO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.Address;
 import com.example.demo.entity.Company;
+import com.example.demo.entity.Image;
 import com.example.demo.entity.User;
 import com.example.demo.exception.CustomException;
 import com.example.demo.exception.ErrorCode;
 import com.example.demo.repository.CompanyRepository;
+import com.example.demo.repository.ImageRepository;
 import com.example.demo.repository.UserRepository;
+import com.google.cloud.storage.Bucket;
+
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,21 +28,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
-
-
 @Slf4j
 @Service
 @AllArgsConstructor
-//@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
 
     @Autowired
+    ImageRepository imageRepository;
+
+    @Autowired
     private CompanyRepository companyRepository;
+
+    private final Bucket bucket;
 
 //    public List<User> getAll(){
 //        return userRepository.findAllNotDeleted1();
@@ -189,4 +195,34 @@ public class UserService implements UserDetailsService {
         return userRepository.save(myexistingUser);
     }
 
+    public Image uploadImage(Image image,byte[] files) {
+        // File 저장 위치 선업
+        String blob = "users/"+image.getUser_seq()+"/images/"+image.getName();
+        image.setUrl(blob);
+        log.info("url"+blob);
+
+        try {
+            // 이미 존재하면 파일 삭제
+            if(bucket.get(blob) != null) {
+                log.info("존재");
+                bucket.get(blob).delete();
+            }
+            // 파일을 Bucket에 저장
+            bucket.create(blob,files,"image/jpg");
+            log.info("저장");
+            // DB에 유저 정보 업데이트 (Profile 이미지 위치 추가)
+            image.setUrl("/users/"+image.getUrl()+"/profile");
+            imageRepository.save(image);
+            return image;
+
+        } catch (CustomException e) {
+            log.error(image.getUrl() + " profile upload faild", e);
+            //throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
+            throw new CustomException(ErrorCode.NOT_CORRECT_USER, "IMAGE_UPLOAD_FAILED");
+        }
+    }
+
+    public byte[] getProfile(String uid) {
+        return bucket.get("users/1/images/input.png.jpg").getContent();
+    }
 }

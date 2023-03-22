@@ -15,4 +15,6 @@ public class Image  extends BaseEntiry {
     private String name;
     @Column
     private String url;
+    @Column
+    private Long user_seq;
 }

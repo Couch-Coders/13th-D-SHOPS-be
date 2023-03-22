@@ -17,8 +17,8 @@ import org.springframework.context.annotation.Configuration;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-@Slf4j
 @Configuration
+@Slf4j
 public class FirebaseInitializer {
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
