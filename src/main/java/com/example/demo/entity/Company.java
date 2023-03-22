@@ -10,13 +10,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
-@Entity(name = "company")
+@Entity(name = "ds_company")
 @Getter
 @Setter
 @DynamicInsert //@ColumnDefault("'N'") 할려고
 public class Company extends BaseEntiry {
+    @Column
     private String name;
+    @Column
     private String email;
+    @Column
     private String phone;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_seq", referencedColumnName = "seq")

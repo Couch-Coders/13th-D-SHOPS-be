@@ -16,6 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void deleteByEmail(String email);
 
     //sql 테스트
-    @Query("SELECT u FROM users u WHERE u.del_Flag_YN = 'N'")
+    @Query("SELECT u FROM ds_user u WHERE u.del_Flag_YN = 'N'")
     List<User> findAllNotDeleted();
 }
