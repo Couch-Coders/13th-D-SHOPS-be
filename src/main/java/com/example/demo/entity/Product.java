@@ -17,6 +17,9 @@ public class Product extends BaseEntiry{
     private String description;
     @Column
     private String options;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_seq", referencedColumnName = "seq")
+    private Image image;
     @Column
     private Long user_seq;
 //    private String description;
