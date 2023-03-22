@@ -105,8 +105,12 @@ public class UserController {
         return userService.uploadImage(image,files.getBytes());
     }
 
-    @GetMapping("/me/{uid}/profile.jpg")
-    public byte[] downloadProfile(@PathVariable String uid) {
-        return userService.getProfile(uid);
+    @GetMapping("/me/{uid}/images/{fileName}")
+    public byte[] downloadProfile(@PathVariable String uid, @PathVariable String fileName) {
+//        log.info(uid);
+//        log.info(fileName);
+        return userService.getProfile(uid, fileName);
+        //byte[]
+//        return "hi";
     }
 }

@@ -54,7 +54,7 @@ public class SecureConfig {
                 //테스트 url 은 아무나 볼 수 있게 하기
                 .requestMatchers("/hello")
                 .requestMatchers(HttpMethod.POST, "/users/me/image/upload")
-                .requestMatchers(HttpMethod.GET, "/users/me/*/*")
+                .requestMatchers(HttpMethod.GET, "/users/me/*/images/*")
 
 //                .requestMatchers(HttpMethod.GET, "/stores/*/reviews")
 //                .requestMatchers(HttpMethod.GET, "/stores")

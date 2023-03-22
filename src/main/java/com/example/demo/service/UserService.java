@@ -208,7 +208,8 @@ public class UserService implements UserDetailsService {
                 bucket.get(blob).delete();
             }
             // 파일을 Bucket에 저장
-            bucket.create(blob,files,"image/jpg");
+//            bucket.create(blob,files,"image/jpg");
+            bucket.create(blob,files,"multipart/form-data");
             log.info("저장");
             // DB에 유저 정보 업데이트 (Profile 이미지 위치 추가)
             image.setUrl("/users/"+image.getUrl()+"/profile");
@@ -222,7 +223,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public byte[] getProfile(String uid) {
-        return bucket.get("users/1/images/input.png.jpg").getContent();
+    public byte[] getProfile(String uid, String fileName) {
+        return bucket.get("users/"+uid+"/images/"+fileName).getContent();
     }
 }
