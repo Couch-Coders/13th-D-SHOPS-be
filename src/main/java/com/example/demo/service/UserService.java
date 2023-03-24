@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private CompanyRepository companyRepository;
 
-    private final Bucket bucket;
+
 
 //    public List<User> getAll(){
 //        return userRepository.findAllNotDeleted1();
@@ -195,35 +195,4 @@ public class UserService implements UserDetailsService {
         return userRepository.save(myexistingUser);
     }
 
-    public Image uploadImage(Image image,byte[] files) {
-        // File 저장 위치 선업
-        String blob = "users/"+image.getUser_seq()+"/images/"+image.getName();
-        image.setUrl(blob);
-        log.info("url"+blob);
-
-        try {
-            // 이미 존재하면 파일 삭제
-            if(bucket.get(blob) != null) {
-                log.info("존재");
-                bucket.get(blob).delete();
-            }
-            // 파일을 Bucket에 저장
-//            bucket.create(blob,files,"image/jpg");
-            bucket.create(blob,files,"multipart/form-data");
-            log.info("저장");
-            // DB에 유저 정보 업데이트 (Profile 이미지 위치 추가)
-            image.setUrl("/"+blob);
-            imageRepository.save(image);
-            return image;
-
-        } catch (CustomException e) {
-            log.error(image.getUrl() + " profile upload faild", e);
-            //throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
-            throw new CustomException(ErrorCode.NOT_CORRECT_USER, "IMAGE_UPLOAD_FAILED");
-        }
-    }
-
-    public byte[] getProfile(String uid, String fileName) {
-        return bucket.get("users/"+uid+"/images/"+fileName).getContent();
-    }
 }

@@ -87,21 +87,4 @@ public class UserController {
     public List<User> getNotDeletedUser(){
         return userRepository.findAllNotDeleted();
     }
-
-    // product > image ? 생각해보기
-    @PostMapping("/me/image/upload")
-    public Image uploadImage(@RequestParam MultipartFile files,@AuthenticationPrincipal User user) throws IOException {
-        Image image = new Image();
-        image.setUser_seq(user.getSeq());
-        log.info("================uploadImage================");
-        log.info(files.getOriginalFilename());
-        image.setName(files.getOriginalFilename());
-        return userService.uploadImage(image,files.getBytes());
-//        return image;
-    }
-
-    @GetMapping("/{uid}/images/{fileName}")
-    public byte[] downloadProfile(@PathVariable String uid, @PathVariable String fileName) {
-        return userService.getProfile(uid, fileName);
-    }
 }

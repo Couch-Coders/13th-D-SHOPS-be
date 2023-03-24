@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AddressDTO extends BaseEntiryDTO{
     private String name;
