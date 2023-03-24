@@ -65,6 +65,8 @@ public class ProductController {
         //existingProduct.setUser_seq(user.getSeq());
         if(product.getName() != null)
             existingProduct.setName(product.getName());
+        if(product.getTitle() != null)
+            existingProduct.setTitle(product.getTitle());
         if(product.getOptions() != null)
             existingProduct.setOptions(product.getOptions());
         if(product.getDescription() != null)
