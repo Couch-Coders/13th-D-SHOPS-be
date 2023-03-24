@@ -58,6 +58,7 @@ public class SecureConfig {
                 .requestMatchers(HttpMethod.GET, "/products/search/*")
                 .requestMatchers(HttpMethod.GET, "/products/*")
                 .requestMatchers(HttpMethod.GET, "/products")
+                .requestMatchers(HttpMethod.GET, "/products/near")
 
 //                .requestMatchers(HttpMethod.GET, "/stores/*/reviews")
 //                .requestMatchers(HttpMethod.GET, "/stores")

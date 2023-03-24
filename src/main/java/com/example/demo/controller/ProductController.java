@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ProductDTO;
+import com.example.demo.entity.Address;
 import com.example.demo.entity.Image;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
@@ -101,5 +102,16 @@ public class ProductController {
     @GetMapping("/{product_seq}/images/{fileName}")
     public byte[] downloadProfile(@PathVariable String product_seq, @PathVariable String fileName) {
         return productService.getProfile(product_seq, fileName);
+    }
+
+    @GetMapping("/near")
+    public Page<Product> findNearestAddresses(Pageable pageable, Double location_x, Double location_y) {
+        return productService.findNear(pageable, location_x, location_y);
+//        return entityManager.createNativeQuery(
+//                        "SELECT address, ( 3959 * acos( cos( radians(:latitude) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(:longitude) ) + sin( radians(:latitude) ) * sin( radians( lat ) ) ) ) AS distance FROM markers HAVING distance < 25 ORDER BY distance LIMIT 0 , 5;",
+//                        Address.class)
+//                .setParameter("latitude", latitude)
+//                .setParameter("longitude", longitude)
+//                .getResultList();
     }
 }

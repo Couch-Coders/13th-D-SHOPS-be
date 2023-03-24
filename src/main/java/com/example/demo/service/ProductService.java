@@ -57,6 +57,8 @@ public class ProductService {
                 .options(dto.getOptions())
                 .description(dto.getDescription())
                 .user_seq(dto.getUser_seq())
+                .location_x(dto.getLocation_x())
+                .location_y(dto.getLocation_y())
                 .build();
 //        product.addImage(dto.getImage());
         log.info(product.toString());
@@ -105,4 +107,8 @@ public class ProductService {
     public byte[] getProfile(String product_seq, String fileName) {
         return bucket.get("products/"+product_seq+"/images/"+fileName).getContent();
     }
+    public Page<Product> findNear(Pageable pageable, Double location_x, Double location_y){
+        return productRepository.findNear(pageable, location_x, location_y);
+    }
+
 }
