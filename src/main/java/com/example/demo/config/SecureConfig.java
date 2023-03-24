@@ -55,6 +55,9 @@ public class SecureConfig {
                 .requestMatchers("/hello")
 //                .requestMatchers(HttpMethod.POST, "/users/me/image/upload")
                 .requestMatchers(HttpMethod.GET, "/products/*/images/*")
+                .requestMatchers(HttpMethod.GET, "/products/search/*")
+                .requestMatchers(HttpMethod.GET, "/products/*")
+                .requestMatchers(HttpMethod.GET, "/products")
 
 //                .requestMatchers(HttpMethod.GET, "/stores/*/reviews")
 //                .requestMatchers(HttpMethod.GET, "/stores")

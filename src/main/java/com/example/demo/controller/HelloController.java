@@ -8,7 +8,7 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String hello(){
-        return "V1.6(search)";
+        return "V1.7(find near)";
     }
 
 }
