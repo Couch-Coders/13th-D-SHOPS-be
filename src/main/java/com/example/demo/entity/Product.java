@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import com.google.api.client.json.Json;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -31,4 +32,14 @@ public class Product extends BaseEntiry{
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "user_seq", referencedColumnName = "seq")
 //    private User user;
+
+    @Builder
+    public Product (Product product) {
+        this.seq = product.getSeq();
+        this.name = product.getName();
+        this.description = product.getDescription();
+        this.options = product.getOptions();
+        this.image = product.getImage();
+        this.user_seq = product.getUser_seq();
+    }
 }

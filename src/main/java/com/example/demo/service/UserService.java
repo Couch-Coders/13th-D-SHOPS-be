@@ -212,7 +212,7 @@ public class UserService implements UserDetailsService {
             bucket.create(blob,files,"multipart/form-data");
             log.info("저장");
             // DB에 유저 정보 업데이트 (Profile 이미지 위치 추가)
-            image.setUrl("/users/"+image.getUrl()+"/profile");
+            image.setUrl("/"+blob);
             imageRepository.save(image);
             return image;
 
