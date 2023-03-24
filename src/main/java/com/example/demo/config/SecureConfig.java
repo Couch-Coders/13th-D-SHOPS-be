@@ -47,16 +47,19 @@ public class SecureConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                 //로그인 url 은 아무나 볼 수 있게 하기
-                .requestMatchers(HttpMethod.GET, "/auth")
+//                .requestMatchers(HttpMethod.GET, "/auth")
                 .requestMatchers(HttpMethod.POST, "/auth")
-                .requestMatchers(HttpMethod.GET, "/auth/not")
+//                .requestMatchers(HttpMethod.GET, "/auth/not")
                 .requestMatchers("/favicon.ico")
                 //테스트 url 은 아무나 볼 수 있게 하기
                 .requestMatchers("/hello")
-                .requestMatchers(HttpMethod.GET, "/stores/*/reviews")
-                .requestMatchers(HttpMethod.GET, "/stores")
-                .requestMatchers(HttpMethod.GET, "/stores/*");
+//                .requestMatchers(HttpMethod.POST, "/users/me/image/upload")
+                .requestMatchers(HttpMethod.GET, "/products/*/images/*")
 
+//                .requestMatchers(HttpMethod.GET, "/stores/*/reviews")
+//                .requestMatchers(HttpMethod.GET, "/stores")
+//                .requestMatchers(HttpMethod.GET, "/stores/*")
+            ;
 //        return web -> web.ignoring()
 //                .antMatchers(HttpMethod.GET, "/users/me")
 //                .antMatchers("/favicon.ico")
