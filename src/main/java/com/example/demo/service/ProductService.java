@@ -32,9 +32,14 @@ public class ProductService {
     private ImageRepository imageRepository;
     private final Bucket bucket;
 
-    public Page<Product> getProducts(Pageable pageable){
-        return productRepository.findAll(pageable);
-//        Product
+    public Page<Product> getProducts(Pageable pageable, String keyword){
+        if (keyword == null){
+            System.out.println("keyword is null");
+            return productRepository.findAll(pageable);
+        }
+
+        return productRepository.findByTitleContains(pageable, keyword);
+//        return productRepository.findAll(pageable);
     }
 
     public Page<Product> getMyProducts(Pageable pageable, Long user_seq){
