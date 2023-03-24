@@ -36,6 +36,10 @@ public class ProductService {
         return productRepository.findAll(pageable);
 //        Product
     }
+
+    public Page<Product> getMyProducts(Pageable pageable, Long user_seq){
+        return productRepository.findAllBySeq(pageable, user_seq);
+    }
     @Transactional
     public Product createProduct(ProductDTO dto) {
         // 중복 검사
