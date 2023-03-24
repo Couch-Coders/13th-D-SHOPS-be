@@ -1,32 +1,38 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ProductDTO;
+import com.example.demo.entity.Image;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.ProductService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping("/products")
 public class ProductController {
-    @Autowired
-    ProductService productService;
-    @Autowired
-    ProductRepository productRepository;
+    private final ProductService productService;
+    private ProductRepository productRepository;
     @GetMapping("")
-    public List<Product> getProducts(@AuthenticationPrincipal User user){
-        return productService.getProducts();
+    public Page<Product> getProducts(Pageable pageable, @AuthenticationPrincipal User user){
+        return productService.getProducts(pageable);
     }
 
     @GetMapping("/{seq}")
@@ -36,9 +42,9 @@ public class ProductController {
 
     //품목 등록
     @PostMapping("")
-    public Product addProducts(@RequestBody Product product, @AuthenticationPrincipal User user){
-        product.setUser_seq(user.getSeq());
-        return productRepository.save(product);
+    public Product createProducts(@RequestBody ProductDTO productDTO, @AuthenticationPrincipal User user){
+        productDTO.setUser_seq(user.getSeq());
+        return productService.createProduct(productDTO);
     }
 
     //품목 수정
@@ -72,5 +78,22 @@ public class ProductController {
     public  String deleteProduct(@PathVariable Long seq){
         productRepository.deleteById(seq);
         return "succsess";
+    }
+
+    // product > image ? 생각해보기
+    @PostMapping("/{product_seq}/image/upload")
+    public Image uploadImage(@RequestParam MultipartFile files, @PathVariable Long product_seq, @AuthenticationPrincipal User user) throws IOException {
+        Image image = new Image();
+        image.setUser_seq(user.getSeq());
+        image.setProduct_seq(product_seq);
+        log.info("================uploadImage================");
+        log.info(files.getOriginalFilename());
+        image.setName(files.getOriginalFilename());
+        return productService.uploadImage(image,files.getBytes());
+//        return image;
+    }
+    @GetMapping("/{product_seq}/images/{fileName}")
+    public byte[] downloadProfile(@PathVariable String product_seq, @PathVariable String fileName) {
+        return productService.getProfile(product_seq, fileName);
     }
 }

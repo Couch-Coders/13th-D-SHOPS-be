@@ -1,18 +1,24 @@
 package com.example.demo.service;
 
+import java.io.IOException;
+import java.util.Optional;
+
 import com.example.demo.consts.UserActiveStatus;
-import com.example.demo.dto.CompanyDTO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.Address;
 import com.example.demo.entity.Company;
+import com.example.demo.entity.Image;
 import com.example.demo.entity.User;
 import com.example.demo.exception.CustomException;
 import com.example.demo.exception.ErrorCode;
 import com.example.demo.repository.CompanyRepository;
+import com.example.demo.repository.ImageRepository;
 import com.example.demo.repository.UserRepository;
+import com.google.cloud.storage.Bucket;
+
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,21 +28,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
-
-
 @Slf4j
 @Service
 @AllArgsConstructor
-//@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
 
     @Autowired
+    ImageRepository imageRepository;
+
+    @Autowired
     private CompanyRepository companyRepository;
+
+
 
 //    public List<User> getAll(){
 //        return userRepository.findAllNotDeleted1();

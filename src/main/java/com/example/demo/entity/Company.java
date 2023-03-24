@@ -41,6 +41,6 @@ public class Company extends BaseEntiry {
 //    public Company(String name) {
 //        this.name = name;
 //    }
-//    public Company() {
-//    }
+    public Company() {
+    }
 }

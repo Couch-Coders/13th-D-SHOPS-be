@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CompanyDTO extends BaseEntiryDTO{
     private String name;
