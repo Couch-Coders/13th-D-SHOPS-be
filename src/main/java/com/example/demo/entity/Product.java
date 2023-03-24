@@ -21,6 +21,8 @@ public class Product extends BaseEntiry{
     @Column
     private String name;
     @Column
+    private String title;
+    @Column
     private String description;
     @Column
     private String options; //List<String>
@@ -56,9 +58,10 @@ public class Product extends BaseEntiry{
 //        this.user_seq = product.getUser_seq();
 //    }
     @Builder
-    public Product (Long seq, String name, String description, String options, Long user_seq) {
+    public Product (Long seq, String name, String title, String description, String options, Long user_seq) {
         this.seq = seq;
         this.name = name;
+        this.title = title;
         this.description = description;
         this.options = options;
         this.user_seq = user_seq;

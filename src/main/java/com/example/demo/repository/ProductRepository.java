@@ -18,4 +18,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 //    List<ProductDTO> findAll();
     @Query("SELECT u FROM ds_product u WHERE u.user_seq = :seq")
     Page<Product> findAllBySeq(Pageable pageable, @Param("seq") Long seq);
+
+//    Page<Product> findByUser_seqContains(Pageable pageable, Long seq);
+
+    Page<Product> findByTitleContains(Pageable pageable, String name);
 }

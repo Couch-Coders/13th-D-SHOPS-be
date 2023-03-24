@@ -31,8 +31,12 @@ public class ProductController {
     private final ProductService productService;
     private ProductRepository productRepository;
     @GetMapping("")
-    public Page<Product> getProducts(Pageable pageable, @AuthenticationPrincipal User user){
-        return productService.getProducts(pageable);
+    public Page<Product> getProducts(Pageable pageable, @AuthenticationPrincipal User user, @RequestParam(value="k", required=false) String k){
+        return productService.getProducts(pageable, k);
+    }
+    @GetMapping("/search/{k}")
+    public Page<Product> getProductsSearch(Pageable pageable, @AuthenticationPrincipal User user, @PathVariable String k){
+        return productService.getProducts(pageable, k);
     }
 
     @GetMapping("/{seq}")
@@ -65,6 +69,8 @@ public class ProductController {
         //existingProduct.setUser_seq(user.getSeq());
         if(product.getName() != null)
             existingProduct.setName(product.getName());
+        if(product.getTitle() != null)
+            existingProduct.setTitle(product.getTitle());
         if(product.getOptions() != null)
             existingProduct.setOptions(product.getOptions());
         if(product.getDescription() != null)

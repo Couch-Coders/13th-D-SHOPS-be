@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ProductDTO{// extends BaseEntiryDTO
     String name;
+    String title;
     String description;
     String options;
     Image image;
