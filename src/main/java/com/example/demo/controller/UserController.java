@@ -3,15 +3,19 @@ package com.example.demo.controller;
 import com.example.demo.consts.AuthConsts;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.Image;
+import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
 import com.example.demo.repository.CompanyRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.ProductService;
 import com.example.demo.service.auth.AuthService;
 import com.example.demo.service.UserService;
 import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +36,8 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     UserService userService;
+
+    private final ProductService productService;
 
     @Autowired
     AuthService authService;
@@ -86,5 +92,10 @@ public class UserController {
     @GetMapping("/not")
     public List<User> getNotDeletedUser(){
         return userRepository.findAllNotDeleted();
+    }
+
+    @GetMapping("/me/products")
+    public Page<Product> getMyProducts(Pageable pageable, @AuthenticationPrincipal User user){
+        return productService.getMyProducts(pageable, user.getSeq());
     }
 }
