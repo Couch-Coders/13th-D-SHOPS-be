@@ -48,6 +48,7 @@ public class ProductService {
         // 자료 빌드
         Product product = Product.builder()
                 .name(dto.getName())
+                .title(dto.getTitle())
                 .options(dto.getOptions())
                 .description(dto.getDescription())
                 .user_seq(dto.getUser_seq())
