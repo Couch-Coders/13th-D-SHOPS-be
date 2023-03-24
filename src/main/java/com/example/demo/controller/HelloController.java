@@ -8,7 +8,7 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String hello(){
-        return "V1.4(image upload)";
+        return "V1.5(products)";
     }
 
 }
