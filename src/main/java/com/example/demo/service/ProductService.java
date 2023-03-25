@@ -40,7 +40,7 @@ public class ProductService {
     }
 
     public Page<Product> getMyProducts(Pageable pageable, Long user_seq){
-        return productRepository.findAllBySeq(pageable, user_seq);
+        return productRepository.findAllByUserSeq(pageable, user_seq);
     }
     @Transactional
     public Product createProduct(ProductDTO dto) {

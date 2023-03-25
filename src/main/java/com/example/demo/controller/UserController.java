@@ -13,6 +13,7 @@ import com.example.demo.service.ProductService;
 import com.example.demo.service.auth.AuthService;
 import com.example.demo.service.UserService;
 import com.google.firebase.auth.FirebaseAuthException;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,8 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping("/users")
 public class UserController {
     @Autowired
@@ -111,13 +113,13 @@ public class UserController {
         return productService.createProduct(productDTO);
     }
 
-    @PutMapping("/me/products")
-    public Product modifyProducts(@RequestBody Product product, @AuthenticationPrincipal User user){
-        if(product.getName() == null || product.equals(""))
+    @PutMapping("/me/products/{seq}")
+    public Product modifyProducts(@PathVariable Long seq, @RequestBody Product product, @AuthenticationPrincipal User user){
+        if(seq == null || product.equals(""))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비어있음");
 
         // Repository에서 데이터 가져오기
-        Optional<Product> findOne = productRepository.findById(product.getSeq());
+        Optional<Product> findOne = productRepository.findByProductSeq(seq);
         if(!findOne.isPresent()){ //데이터가 이미 존재하면 Exception을 발생시키고 종료
             // Repository에서 가져온 데이터가 존재하면  ResponseStatusException 를 리턴해주는데
             // 이는 Controller에서 HTTP 에러 응답을 하게 하는 Exception이다, HTTP code와 메세지를 적으면된다.
