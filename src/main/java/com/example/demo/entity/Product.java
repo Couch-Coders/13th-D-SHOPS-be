@@ -42,6 +42,8 @@ public class Product extends BaseEntiry{
     Double location_x; // Longitude
     @Column
     Double location_y; // Latitude
+    @Transient
+    private double distance;
 //    private String description;
 //    private String options;
 //    @ManyToOne

@@ -1,16 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ProductDTO;
-import com.example.demo.entity.Address;
 import com.example.demo.entity.Image;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.ProductService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -105,8 +102,8 @@ public class ProductController {
     }
 
     @GetMapping("/near")
-    public Page<Product> findNearestAddresses(Pageable pageable, Double location_x, Double location_y) {
-        return productService.findNear(pageable, location_x, location_y);
+    public Page<Map> findNearestAddresses(Double location_x, Double location_y, Pageable pageable) {
+        return productService.findNear(location_x, location_y, pageable);
 //        return entityManager.createNativeQuery(
 //                        "SELECT address, ( 3959 * acos( cos( radians(:latitude) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(:longitude) ) + sin( radians(:latitude) ) * sin( radians( lat ) ) ) ) AS distance FROM markers HAVING distance < 25 ORDER BY distance LIMIT 0 , 5;",
 //                        Address.class)

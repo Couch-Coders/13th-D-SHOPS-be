@@ -1,19 +1,16 @@
 package com.example.demo.service;
 
-import com.example.demo.consts.UserActiveStatus;
 import com.example.demo.dto.ProductDTO;
 import com.example.demo.entity.Image;
 import com.example.demo.entity.Product;
-import com.example.demo.entity.User;
 import com.example.demo.exception.CustomException;
 import com.example.demo.exception.ErrorCode;
 import com.example.demo.repository.ImageRepository;
 import com.example.demo.repository.ProductRepository;
 import com.google.cloud.storage.Bucket;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -107,8 +104,17 @@ public class ProductService {
     public byte[] getProfile(String product_seq, String fileName) {
         return bucket.get("products/"+product_seq+"/images/"+fileName).getContent();
     }
-    public Page<Product> findNear(Pageable pageable, Double location_x, Double location_y){
-        return productRepository.findNear(pageable, location_x, location_y);
+    @Transient
+//    private double distance;
+    public Page<Map> findNear(Double location_x, Double location_y, Pageable pageable){
+        return productRepository.findNear(location_x, location_y, pageable);
+//        return entityManager.createNativeQuery(
+//                "SELECT address, ( 3959 * acos( cos( radians(:location_y) ) * cos( radians( location_y ) ) * cos( radians( location_x ) - radians(:location_x) ) + sin( radians(:location_y) ) * sin( radians( location_y ) ) ) ) AS distance FROM markers HAVING distance < 25 ORDER BY distance LIMIT 0 , 5;",
+//    Product.class)
+//            .setParameter("location_y", location_y)
+//                .setParameter("location_x", location_x)
+//                .getResultList();
     }
+
 
 }
