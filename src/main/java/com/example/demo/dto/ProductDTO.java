@@ -15,4 +15,6 @@ public class ProductDTO{// extends BaseEntiryDTO
     String options;
     Image image;
     Long user_seq;
+    Double location_x;
+    Double location_y;
 }
