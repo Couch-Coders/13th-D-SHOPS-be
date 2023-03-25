@@ -38,6 +38,12 @@ public class Product extends BaseEntiry{
 //    private List<Image> images = new ArrayList<>();
     @Column
     private Long user_seq;
+    @Column
+    Double location_x; // Longitude
+    @Column
+    Double location_y; // Latitude
+    @Transient
+    private double distance;
 //    private String description;
 //    private String options;
 //    @ManyToOne
@@ -58,13 +64,15 @@ public class Product extends BaseEntiry{
 //        this.user_seq = product.getUser_seq();
 //    }
     @Builder
-    public Product (Long seq, String name, String title, String description, String options, Long user_seq) {
+    public Product (Long seq, String name, String title, String description, String options, Long user_seq, Double location_x, Double location_y) {
         this.seq = seq;
         this.name = name;
         this.title = title;
         this.description = description;
         this.options = options;
         this.user_seq = user_seq;
+        this.location_x = location_x;
+        this.location_y = location_y;
     }
     public Product() {
 

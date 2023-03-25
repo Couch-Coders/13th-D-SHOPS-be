@@ -21,7 +21,7 @@ public class Address extends BaseEntiry {
     @Column
     String detail;
     @Column
-    String location_x;
+    Double location_x; // Longitude
     @Column
-    String location_y;
+    Double location_y; // Latitude
 }

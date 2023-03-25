@@ -7,9 +7,7 @@ import com.example.demo.entity.User;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.ProductService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -19,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -101,5 +99,16 @@ public class ProductController {
     @GetMapping("/{product_seq}/images/{fileName}")
     public byte[] downloadProfile(@PathVariable String product_seq, @PathVariable String fileName) {
         return productService.getProfile(product_seq, fileName);
+    }
+
+    @GetMapping("/near")
+    public Page<Map> findNearestAddresses(Double location_x, Double location_y, Pageable pageable) {
+        return productService.findNear(location_x, location_y, pageable);
+//        return entityManager.createNativeQuery(
+//                        "SELECT address, ( 3959 * acos( cos( radians(:latitude) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(:longitude) ) + sin( radians(:latitude) ) * sin( radians( lat ) ) ) ) AS distance FROM markers HAVING distance < 25 ORDER BY distance LIMIT 0 , 5;",
+//                        Address.class)
+//                .setParameter("latitude", latitude)
+//                .setParameter("longitude", longitude)
+//                .getResultList();
     }
 }
