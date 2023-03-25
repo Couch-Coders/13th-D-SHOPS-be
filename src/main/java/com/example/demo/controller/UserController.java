@@ -102,6 +102,11 @@ public class UserController {
         return userRepository.findAllNotDeleted();
     }
 
+    @GetMapping("/me/products/{seq}")
+    public Product getProduct(@PathVariable Long seq){
+        return productService.getProduct(seq);
+    }
+
     @GetMapping("/me/products")
     public Page<Product> getMyProducts(Pageable pageable, @AuthenticationPrincipal User user){
         return productService.getMyProducts(pageable, user.getSeq());
