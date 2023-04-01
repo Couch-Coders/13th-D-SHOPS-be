@@ -77,13 +77,8 @@ public class ProductService {
 //        return productDTO;
 //    }
     public Product uploadImage(Product product,byte[] files) {
-//        Image image = new Image();
-//        image.setUser_seq(product.getUser_seq());
-//        image.setName(files.);
-
-        // File 저장 위치 선업
+        // File 저장 위치
         String blob = "products/"+product.getSeq()+"/images/"+product.getImages().get(0).getName();
-//        image.setUrl(blob);
         log.info("url"+blob);
 
         try {
@@ -97,14 +92,9 @@ public class ProductService {
             bucket.create(blob,files,"multipart/form-data");
             log.info("저장");
             // DB에 유저 정보 업데이트 (Profile 이미지 위치 추가)
-//            image.setUrl("/"+blob);
             product.getImages().get(0).setUrl("/"+blob);
-//            product.getImages().add(image);
-//            product.addImage(image);
-//            imageRepository.save(image);
-            productRepository.save(product);
-//            return image;
-            return product;
+
+            return productRepository.save(product);
 
         } catch (CustomException e) {
 //            log.error(image.getUrl() + " profile upload faild", e);

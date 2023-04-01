@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.consts.AuthConsts;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.dto.ProductDTO;
+import com.example.demo.entity.Image;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
 import com.example.demo.repository.ProductRepository;
@@ -22,8 +23,10 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -150,5 +153,25 @@ public class UserController {
     public  String deleteProduct(@PathVariable Long seq){
         productRepository.deleteById(seq);
         return "succsess";
+    }
+    @PostMapping("/me/products/{product_seq}/images")
+    public Product uploadImage(@RequestParam MultipartFile files, @PathVariable Long product_seq, @AuthenticationPrincipal User user) throws IOException {
+        Optional<Product> findOne = productRepository.findByProductSeq(product_seq);
+        if(!findOne.isPresent()){ //데이터가 이미 존재하면 Exception을 발생시키고 종료
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "카테고리가 존재하지 않습니다.");
+        }
+        Product existingProduct = findOne.get();
+
+        // 이미지 준비
+        Image image = new Image();
+        image.setUser_seq(user.getSeq());
+        image.setName(files.getOriginalFilename());
+        existingProduct.addImage(image);
+
+        return productService.uploadImage(existingProduct, files.getBytes());
+    }
+    @GetMapping("/{product_seq}/images/{fileName}")
+    public byte[] downloadProfile(@PathVariable String product_seq, @PathVariable String fileName) {
+        return productService.getProfile(product_seq, fileName);
     }
 }
