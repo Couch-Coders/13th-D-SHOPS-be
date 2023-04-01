@@ -8,7 +8,7 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String hello(){
-        return "V1.7(find near)";
+        return "V1.8(post image)";
     }
 
 }
