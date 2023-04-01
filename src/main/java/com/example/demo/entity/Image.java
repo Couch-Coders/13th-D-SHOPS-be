@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -15,9 +15,22 @@ public class Image  extends BaseEntiry {
     private String name;
     @Column
     private String url;
-    @Column
-    private Long product_seq;
+//    @Column
+//    private Long product_seq;
     @Column
     private Long user_seq;
+//    @ManyToOne
+//    @JoinColumn(name = "product_seq", referencedColumnName = "seq")
+//    private Product product;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "product_seq", referencedColumnName = "seq")
+//    private Product product;
+//    @ManyToOne
+//    @JoinColumn(name = "product_seq", referencedColumnName = "seq")
+//    @JsonBackReference
+//    private  Product product;
+    public Image() {
+
+    }
 }
 
