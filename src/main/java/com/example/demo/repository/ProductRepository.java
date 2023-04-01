@@ -21,7 +21,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT u FROM ds_product u WHERE u.seq = :seq")
     Optional<Product> findByProductSeq(@Param("seq") Long seq);
 
-    Optional<Product> findBySeq(Long seq);
+//    Optional<Product> findBySeq(Long seq);
 
 //    @Query("SELECT pd.seq AS seq,( 3959 * acos( cos( radians(:location_y) ) * cos( radians( location_y ) ) * cos( radians( location_x ) - radians(:location_x) ) + sin( radians(:location_y) ) * sin( radians( location_y ) ) ) ) distance FROM ds_product pd") //  HAVING distance < 25 ORDER BY distance LIMIT 0 , 5;
 //@Query("SELECT u.seq AS seq,( 3959 * acos( cos( radians(:location_y) ) * cos( radians( location_y ) ) * cos( radians( location_x ) - radians(:location_x) ) + sin( radians(:location_y) ) * sin( radians( location_y ) ) ) ) AS distance FROM ds_product u") //  HAVING distance < 25 ORDER BY distance LIMIT 0 , 5;

@@ -63,11 +63,11 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public ProductDTO getProduct(Long seq){
+    public Product getProduct(Long seq){
         Product product = productRepository.findById(seq).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "상품이 존재하지 않습니다."));
-        ProductDTO productDTO = new ProductDTO(product);
-        return productDTO;
+//        ProductDTO productDTO = new ProductDTO(product);
+        return product;
     }
 
 //    @Transactional // 트랜젝셕
@@ -76,10 +76,14 @@ public class ProductService {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자 id가 비었습니다.");
 //        return productDTO;
 //    }
-    public Image uploadImage(Image image,byte[] files) {
+    public Product uploadImage(Product product,byte[] files) {
+//        Image image = new Image();
+//        image.setUser_seq(product.getUser_seq());
+//        image.setName(files.);
+
         // File 저장 위치 선업
-        String blob = "products/"+image.getProduct_seq()+"/images/"+image.getName();
-        image.setUrl(blob);
+        String blob = "products/"+product.getSeq()+"/images/"+product.getImages().get(0).getName();
+//        image.setUrl(blob);
         log.info("url"+blob);
 
         try {
@@ -93,12 +97,19 @@ public class ProductService {
             bucket.create(blob,files,"multipart/form-data");
             log.info("저장");
             // DB에 유저 정보 업데이트 (Profile 이미지 위치 추가)
-            image.setUrl("/"+blob);
-            imageRepository.save(image);
-            return image;
+//            image.setUrl("/"+blob);
+            product.getImages().get(0).setUrl("/"+blob);
+//            product.getImages().add(image);
+//            product.addImage(image);
+//            imageRepository.save(image);
+            productRepository.save(product);
+//            return image;
+            return product;
 
         } catch (CustomException e) {
-            log.error(image.getUrl() + " profile upload faild", e);
+//            log.error(image.getUrl() + " profile upload faild", e);
+            log.error(product.getImages().get(0).getUrl() + " profile upload faild", e);
+
             //throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
             throw new CustomException(ErrorCode.NOT_CORRECT_USER, "IMAGE_UPLOAD_FAILED");
         }

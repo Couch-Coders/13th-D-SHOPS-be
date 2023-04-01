@@ -101,7 +101,7 @@ public class UserController {
     }
 
     @GetMapping("/me/products/{seq}")
-    public ProductDTO getProduct(@PathVariable Long seq){
+    public Product getProduct(@PathVariable Long seq){
         return productService.getProduct(seq);
     }
 

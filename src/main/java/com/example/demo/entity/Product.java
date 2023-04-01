@@ -2,12 +2,10 @@ package com.example.demo.entity;
 
 import com.example.demo.dto.ProductDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.api.client.json.Json;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
@@ -46,6 +44,19 @@ public class Product extends BaseEntiry{
     @JoinColumn(name = "company_seq", referencedColumnName = "seq")//, insertable = false, updatable = false
 //    @JsonIgnore
     private Company company;
+//    @ManyToOne
+//    @JoinColumn(name = "image_seq", referencedColumnName = "seq")
+////    private List<Image> image = new ArrayList<>();
+//    private Image image;
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)//
+////    @JoinColumn(name = "image_seq", referencedColumnName = "seq")
+//    private List<Image> images = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
+
+    public void addImage(final Image image) {
+        images.add(image);
+    }
     @Column
     Double location_x; // Longitude
     @Column
@@ -98,7 +109,10 @@ public class Product extends BaseEntiry{
     public Product() {
 
     }
-//    public void addImage(Image image){
-//        this.image.add(image);
+//    public void addImages(List<Image> images){
+//        this.images.addAll(images);
+//    }
+//    public void putImage(List<Image> images){
+//        this.images = images;
 //    }
 }
