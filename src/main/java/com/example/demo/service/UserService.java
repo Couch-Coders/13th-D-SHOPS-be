@@ -64,9 +64,15 @@ public class UserService implements UserDetailsService {
 
     public User addUser(String email) {
         log.info("====================addUser====================");
+        // 20230401 jay 생성시 company 와 address 생성할 수 있게 수정
+        Address address = new Address();
+        address.setName("");
+        Company company = new Company();
+        company.setName("");
+        company.setAddress(address);
         User user = User.builder()
                 .email(email)
-                .company(null)
+                .company(company)
                 .userActiveStatus(UserActiveStatus.ACTIVE)
                 .build();
         return userRepository.save(user);
