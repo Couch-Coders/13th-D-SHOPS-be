@@ -3,10 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.consts.AuthConsts;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.dto.ProductDTO;
-import com.example.demo.entity.Image;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
-import com.example.demo.repository.CompanyRepository;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.ProductService;
@@ -14,7 +12,6 @@ import com.example.demo.service.auth.AuthService;
 import com.example.demo.service.UserService;
 import com.google.firebase.auth.FirebaseAuthException;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,13 +22,9 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -53,16 +46,20 @@ public class UserController {
     //private final UserService userService;
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable Long id) {
+    public UserDTO getUser(@PathVariable Long id) {
         return userService.getUser(id);
     }
 
     // 내정보
     @GetMapping("/me")
-    public User getUser(@AuthenticationPrincipal User user) {
+    public UserDTO getUser(@AuthenticationPrincipal User user) {
         log.info("getUser " + user);
         return userService.getUser(user.getSeq());
     }
+//    public User getUser(@AuthenticationPrincipal User user) {
+//        log.info("getUser " + user);
+//        return userService.getUser(user.getSeq());
+//    }
 
     // 회원 탈퇴
     @DeleteMapping("/me")
@@ -76,9 +73,10 @@ public class UserController {
 
     // 회원 정보 수정
     @PutMapping("/me")
-    public User modifyUser(@RequestBody UserDTO userDTO, @AuthenticationPrincipal User user) {
+    public UserDTO modifyUser(@RequestBody UserDTO userDTO, @AuthenticationPrincipal User user) {
         userDTO.setSeq(user.getSeq());
-        return userService.modifyUser(userDTO);
+        UserDTO myUserDTO = new UserDTO(userService.modifyUser(userDTO));
+        return myUserDTO;
         //return userService.save(userDTO);
     }
 
@@ -103,7 +101,7 @@ public class UserController {
     }
 
     @GetMapping("/me/products/{seq}")
-    public Product getProduct(@PathVariable Long seq){
+    public ProductDTO getProduct(@PathVariable Long seq){
         return productService.getProduct(seq);
     }
 
@@ -113,9 +111,12 @@ public class UserController {
     }
 
     @PostMapping("/me/products")
-    public Product createMyProducts(@RequestBody ProductDTO productDTO, @AuthenticationPrincipal User user){
-        productDTO.setUser_seq(user.getSeq());
-        return productService.createProduct(productDTO);
+    public Product createMyProducts(@RequestBody Product product, @AuthenticationPrincipal User user){
+        product.setUser_seq(user.getSeq());
+        //20230401 jay product 생성시 회사, 주소 연결
+        product.setCompany(user.getCompany());
+        Product productResult = productService.createProduct(product);
+        return productResult;
     }
 
     @PutMapping("/me/products/{seq}")

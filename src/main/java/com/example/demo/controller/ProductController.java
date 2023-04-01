@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ProductDTO;
+import com.example.demo.entity.Company;
 import com.example.demo.entity.Image;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
@@ -38,15 +39,17 @@ public class ProductController {
     }
 
     @GetMapping("/{seq}")
-    public Product getProduct(@PathVariable Long seq){
+    public ProductDTO getProduct(@PathVariable Long seq){
         return productService.getProduct(seq);
     }
 
     //품목 등록
     @PostMapping("")
-    public Product createProducts(@RequestBody ProductDTO productDTO, @AuthenticationPrincipal User user){
-        productDTO.setUser_seq(user.getSeq());
-        return productService.createProduct(productDTO);
+    public Product createProducts(@RequestBody Product product, @AuthenticationPrincipal User user){
+        product.setUser_seq(user.getSeq());
+//        Company company = new Company(user.getCompany());
+        product.setCompany(user.getCompany());
+        return productService.createProduct(product);
     }
 
     //품목 수정

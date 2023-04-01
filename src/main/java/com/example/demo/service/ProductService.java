@@ -43,28 +43,31 @@ public class ProductService {
         return productRepository.findAllByUserSeq(pageable, user_seq);
     }
     @Transactional
-    public Product createProduct(ProductDTO dto) {
+    public Product createProduct(Product product) {
         // 중복 검사
         // 중복 에러
         // 자료 가져오기
         // 자료 빌드
-        Product product = Product.builder()
-                .name(dto.getName())
-                .title(dto.getTitle())
-                .options(dto.getOptions())
-                .description(dto.getDescription())
-                .user_seq(dto.getUser_seq())
-                .location_x(dto.getLocation_x())
-                .location_y(dto.getLocation_y())
-                .build();
+//        Product productPrepare = Product.builder()
+//                .name(product.getName())
+//                .title(product.getTitle())
+//                .options(product.getOptions())
+//                .description(product.getDescription())
+//                .user_seq(product.getUser_seq())
+//                .company(product.getCompany())
+//                .location_x(product.getLocation_x())
+//                .location_y(product.getLocation_y())
+//                .build();
 //        product.addImage(dto.getImage());
-        log.info(product.toString());
+//        log.info(product.toString());
         return productRepository.save(product);
     }
 
-    public Product getProduct(Long seq){
-        return productRepository.findById(seq).orElseThrow(() ->
+    public ProductDTO getProduct(Long seq){
+        Product product = productRepository.findById(seq).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "상품이 존재하지 않습니다."));
+        ProductDTO productDTO = new ProductDTO(product);
+        return productDTO;
     }
 
 //    @Transactional // 트랜젝셕
