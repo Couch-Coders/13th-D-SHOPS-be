@@ -40,31 +40,34 @@ public class ProductService {
     }
 
     public Page<Product> getMyProducts(Pageable pageable, Long user_seq){
-        return productRepository.findAllBySeq(pageable, user_seq);
+        return productRepository.findAllByUserSeq(pageable, user_seq);
     }
     @Transactional
-    public Product createProduct(ProductDTO dto) {
+    public Product createProduct(Product product) {
         // 중복 검사
         // 중복 에러
         // 자료 가져오기
         // 자료 빌드
-        Product product = Product.builder()
-                .name(dto.getName())
-                .title(dto.getTitle())
-                .options(dto.getOptions())
-                .description(dto.getDescription())
-                .user_seq(dto.getUser_seq())
-                .location_x(dto.getLocation_x())
-                .location_y(dto.getLocation_y())
-                .build();
+//        Product productPrepare = Product.builder()
+//                .name(product.getName())
+//                .title(product.getTitle())
+//                .options(product.getOptions())
+//                .description(product.getDescription())
+//                .user_seq(product.getUser_seq())
+//                .company(product.getCompany())
+//                .location_x(product.getLocation_x())
+//                .location_y(product.getLocation_y())
+//                .build();
 //        product.addImage(dto.getImage());
-        log.info(product.toString());
+//        log.info(product.toString());
         return productRepository.save(product);
     }
 
     public Product getProduct(Long seq){
-        return productRepository.findById(seq).orElseThrow(() ->
+        Product product = productRepository.findById(seq).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "상품이 존재하지 않습니다."));
+//        ProductDTO productDTO = new ProductDTO(product);
+        return product;
     }
 
 //    @Transactional // 트랜젝셕
@@ -73,10 +76,9 @@ public class ProductService {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자 id가 비었습니다.");
 //        return productDTO;
 //    }
-    public Image uploadImage(Image image,byte[] files) {
-        // File 저장 위치 선업
-        String blob = "products/"+image.getProduct_seq()+"/images/"+image.getName();
-        image.setUrl(blob);
+    public Product uploadImage(Product product,byte[] files) {
+        // File 저장 위치
+        String blob = "products/"+product.getSeq()+"/images/"+product.getImages().get(0).getName();
         log.info("url"+blob);
 
         try {
@@ -90,12 +92,14 @@ public class ProductService {
             bucket.create(blob,files,"multipart/form-data");
             log.info("저장");
             // DB에 유저 정보 업데이트 (Profile 이미지 위치 추가)
-            image.setUrl("/"+blob);
-            imageRepository.save(image);
-            return image;
+            product.getImages().get(0).setUrl("/"+blob);
+
+            return productRepository.save(product);
 
         } catch (CustomException e) {
-            log.error(image.getUrl() + " profile upload faild", e);
+//            log.error(image.getUrl() + " profile upload faild", e);
+            log.error(product.getImages().get(0).getUrl() + " profile upload faild", e);
+
             //throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
             throw new CustomException(ErrorCode.NOT_CORRECT_USER, "IMAGE_UPLOAD_FAILED");
         }

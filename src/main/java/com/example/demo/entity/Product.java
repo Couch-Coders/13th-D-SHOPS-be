@@ -1,12 +1,11 @@
 package com.example.demo.entity;
 
 import com.example.demo.dto.ProductDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.api.client.json.Json;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
@@ -38,6 +37,26 @@ public class Product extends BaseEntiry{
 //    private List<Image> images = new ArrayList<>();
     @Column
     private Long user_seq;
+    //20230401 jay product 생성시 회사, 주소 연결
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "company_seq", referencedColumnName = "seq")
+    @ManyToOne
+    @JoinColumn(name = "company_seq", referencedColumnName = "seq")//, insertable = false, updatable = false
+//    @JsonIgnore
+    private Company company;
+//    @ManyToOne
+//    @JoinColumn(name = "image_seq", referencedColumnName = "seq")
+////    private List<Image> image = new ArrayList<>();
+//    private Image image;
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)//
+////    @JoinColumn(name = "image_seq", referencedColumnName = "seq")
+//    private List<Image> images = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
+
+    public void addImage(final Image image) {
+        images.add(image);
+    }
     @Column
     Double location_x; // Longitude
     @Column
@@ -64,20 +83,36 @@ public class Product extends BaseEntiry{
 //        this.user_seq = product.getUser_seq();
 //    }
     @Builder
-    public Product (Long seq, String name, String title, String description, String options, Long user_seq, Double location_x, Double location_y) {
+    public Product (Product product) {
+        this.seq = product.seq;
+        this.name = product.name;
+        this.title = product.title;
+        this.description = product.description;
+        this.options = product.options;
+        this.user_seq = product.user_seq;
+        this.company = product.company;
+        this.location_x = product.location_x;
+        this.location_y = product.location_y;
+    }
+    @Builder
+    public Product (Long seq, String name, String title, String description, String options, Long user_seq, Company company, Double location_x, Double location_y) {
         this.seq = seq;
         this.name = name;
         this.title = title;
         this.description = description;
         this.options = options;
         this.user_seq = user_seq;
+        this.company = company;
         this.location_x = location_x;
         this.location_y = location_y;
     }
     public Product() {
 
     }
-//    public void addImage(Image image){
-//        this.image.add(image);
+//    public void addImages(List<Image> images){
+//        this.images.addAll(images);
+//    }
+//    public void putImage(List<Image> images){
+//        this.images = images;
 //    }
 }

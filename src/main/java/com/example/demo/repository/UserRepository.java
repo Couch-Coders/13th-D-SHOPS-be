@@ -12,9 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
-
     void deleteByEmail(String email);
-
     //sql 테스트
     @Query("SELECT u FROM ds_user u WHERE u.del_Flag_YN = 'N'")
     List<User> findAllNotDeleted();

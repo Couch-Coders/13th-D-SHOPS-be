@@ -3,10 +3,7 @@ package com.example.demo.dto;
 import com.example.demo.entity.BaseEntiry;
 import com.example.demo.entity.Company;
 import com.example.demo.entity.User;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -16,9 +13,9 @@ public class UserDTO extends BaseEntiryDTO {
     String email;
     String name;
     String phone;
-    LocalDateTime registeredDate;
     Company company;
 
+    @Builder
     public UserDTO(User user){
         this.seq = user.getSeq();
         this.email = user.getEmail();

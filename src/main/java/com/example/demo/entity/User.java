@@ -57,8 +57,6 @@ public class User extends BaseEntiry implements UserDetails {
         this.email = email;
         this.name = name;
         this.phone = phone;
-        this.registeredDate = registeredDate;
-        this.userActiveStatus = userActiveStatus;
         this.company = company;
     }
 

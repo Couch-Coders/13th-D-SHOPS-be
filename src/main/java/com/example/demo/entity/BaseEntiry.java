@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -24,10 +26,12 @@ public class BaseEntiry {
 //    @Column(updatable = false, nullable = false, columnDefinition = "INT(11)")
 //    @Column(updatable = false, nullable = false, columnDefinition = "INT(11)")
     Long seq;
-    @CreatedDate
+    @CreationTimestamp
+    @Column(updatable = false)
     LocalDateTime add_date;
 
-    @LastModifiedDate
+//    @LastModifiedDate
+    @UpdateTimestamp
     LocalDateTime mod_date;
 
     @Column(columnDefinition = "CHAR(1) DEFAULT 'N'")

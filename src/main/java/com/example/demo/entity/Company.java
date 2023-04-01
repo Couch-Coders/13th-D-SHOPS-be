@@ -41,6 +41,14 @@ public class Company extends BaseEntiry {
 //    public Company(String name) {
 //        this.name = name;
 //    }
+    @Builder
+    public Company (Company company) {
+        this.seq = company.getSeq();
+        this.name = company.getName();
+        this.email = company.getEmail();
+        this.phone = company.getPhone();
+        this.address = company.getAddress();
+    }
     public Company() {
     }
 }

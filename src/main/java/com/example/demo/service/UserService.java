@@ -1,20 +1,17 @@
 package com.example.demo.service;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import com.example.demo.consts.UserActiveStatus;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.Address;
 import com.example.demo.entity.Company;
-import com.example.demo.entity.Image;
 import com.example.demo.entity.User;
 import com.example.demo.exception.CustomException;
 import com.example.demo.exception.ErrorCode;
 import com.example.demo.repository.CompanyRepository;
 import com.example.demo.repository.ImageRepository;
 import com.example.demo.repository.UserRepository;
-import com.google.cloud.storage.Bucket;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,9 +61,15 @@ public class UserService implements UserDetailsService {
 
     public User addUser(String email) {
         log.info("====================addUser====================");
+        // 20230401 jay 생성시 company 와 address 생성할 수 있게 수정
+        Address address = new Address();
+        address.setName("");
+        Company company = new Company();
+        company.setName("");
+        company.setAddress(address);
         User user = User.builder()
                 .email(email)
-                .company(null)
+                .company(company)
                 .userActiveStatus(UserActiveStatus.ACTIVE)
                 .build();
         return userRepository.save(user);
@@ -91,10 +94,13 @@ public class UserService implements UserDetailsService {
         user.activateUser();
     }
 
-    public User getUser(Long id) {
+    public UserDTO getUser(Long id) {
         log.info("====================getUser====================");
-        return userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER, "존재하지 않는 유저입니다."));
+        // 20230401 jay 원하는 자료만 보여줄려고
+        UserDTO userDTO = new UserDTO(user);
+        return userDTO;
     }
 
     @Transactional // 트랜젝셕
