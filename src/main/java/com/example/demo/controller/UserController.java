@@ -6,6 +6,7 @@ import com.example.demo.dto.ProductDTO;
 import com.example.demo.entity.Image;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
+import com.example.demo.repository.ImageRepository;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.ProductService;
@@ -172,6 +173,30 @@ public class UserController {
     }
     @GetMapping("/{product_seq}/images/{fileName}")
     public byte[] downloadProfile(@PathVariable String product_seq, @PathVariable String fileName) {
+
         return productService.getProfile(product_seq, fileName);
+    }
+    @DeleteMapping("/me/products/{productSeq}/images/{imageSeq}")
+    public Product deleteImage(@PathVariable Long productSeq, @PathVariable Long imageSeq) {
+
+        return productService.deleteImage(productSeq, imageSeq);
+//        // product 가져오기
+//        Optional<Product> findOne = productRepository.findByProductSeq(productSeq);
+//        if(!findOne.isPresent()){
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "카테고리가 존재하지 않습니다.");
+//        }
+//        Product existingProduct = findOne.get();
+//
+//        // image 가져오기
+//        Image image = existingProduct.getImages().stream()
+//                .filter(img -> img.getSeq().equals(imageSeq))
+//                .findFirst()
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "카테고리가 존재하지 않습니다."));
+//        log.info("deleteImage: " + image.getSeq());
+//
+//        //이미지 삭제
+//        existingProduct.getImages().remove(image);
+//
+//        return productRepository.save(existingProduct);
     }
 }

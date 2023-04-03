@@ -57,6 +57,9 @@ public class Product extends BaseEntiry{
     public void addImage(final Image image) {
         images.add(image);
     }
+    public void deleteImage(Long index) {
+        images.remove(index);
+    }
     @Column
     Double location_x; // Longitude
     @Column
