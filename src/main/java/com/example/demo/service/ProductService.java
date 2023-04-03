@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -76,12 +77,26 @@ public class ProductService {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자 id가 비었습니다.");
 //        return productDTO;
 //    }
+    @Transient
     public Product uploadImage(Product product,byte[] files) {
+        // 받아온 품목을 저장하여 image seq 받아온다.
+        Product returnProduct = productRepository.save(product);
         // File 저장 위치
-        String blob = "products/"+product.getSeq()+"/images/"+product.getImages().get(0).getName();
-        log.info("url"+blob);
+        int imageIndex = 0;
+        try {
+            imageIndex = returnProduct.getImages().size()-1;
+            log.info("imageIndex: "+imageIndex);
+        } catch (CustomException e) {
+            log.error(returnProduct.getImages().size() + " imageSize", e);
+            throw new CustomException(ErrorCode.NOT_CORRECT_USER, "IMAGE_UPLOAD_FAILED");
+        }
 
         try {
+
+            //String blob = "products/"+product.getSeq()+"/images/"+product.getImages().get(imageIndex).getName();
+            String blob = "products/"+returnProduct.getSeq()+"/images/"+returnProduct.getImages().get(imageIndex).getSeq();
+            log.info("url"+blob);
+
             // 이미 존재하면 파일 삭제
             if(bucket.get(blob) != null) {
                 log.info("존재");
@@ -92,19 +107,58 @@ public class ProductService {
             bucket.create(blob,files,"multipart/form-data");
             log.info("저장");
             // DB에 유저 정보 업데이트 (Profile 이미지 위치 추가)
-            product.getImages().get(0).setUrl("/"+blob);
+            returnProduct.getImages().get(imageIndex).setUrl("/"+blob);
 
-            return productRepository.save(product);
+            return productRepository.save(returnProduct);
 
         } catch (CustomException e) {
 //            log.error(image.getUrl() + " profile upload faild", e);
-            log.error(product.getImages().get(0).getUrl() + " profile upload faild", e);
+            log.error(returnProduct.getImages().get(imageIndex).getUrl() + " profile upload faild", e);
 
             //throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
             throw new CustomException(ErrorCode.NOT_CORRECT_USER, "IMAGE_UPLOAD_FAILED");
         }
     }
+    @Transient
+    public Product deleteImage(Long productSeq, Long imageSeq) {
+        // product 가져오기
+        Optional<Product> findOne = productRepository.findByProductSeq(productSeq);
+        if(!findOne.isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "카테고리가 존재하지 않습니다.");
+        }
+        Product existingProduct = findOne.get();
 
+        // image 가져오기
+        Image image = existingProduct.getImages().stream()
+                .filter(img -> img.getSeq().equals(imageSeq))
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "카테고리가 존재하지 않습니다."));
+
+        // image 파일 삭제
+        String blob = "products/"+existingProduct.getSeq()+"/images/"+image.getSeq();
+        log.info("url"+blob);
+
+        try {
+            // 이미 존재하면 파일 삭제
+            if(bucket.get(blob) != null) {
+                log.info("존재");
+                bucket.get(blob).delete();
+            }
+
+            // image 삭제
+            existingProduct.getImages().remove(image);
+
+            // product 저장
+            return productRepository.save(existingProduct);
+
+        } catch (CustomException e) {
+            log.error(blob + " image file delete faild", e);
+
+            //throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
+            throw new CustomException(ErrorCode.NOT_CORRECT_USER, "IMAGE_UPLOAD_FAILED");
+        }
+
+    }
     public byte[] getProfile(String product_seq, String fileName) {
         return bucket.get("products/"+product_seq+"/images/"+fileName).getContent();
     }
