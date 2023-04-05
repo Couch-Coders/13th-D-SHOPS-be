@@ -8,7 +8,7 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String hello(){
-        return "V1.10(move near product to address)";
+        return "V1.11(add near url)";
     }
 
 }
