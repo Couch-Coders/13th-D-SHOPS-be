@@ -60,10 +60,10 @@ public class Product extends BaseEntiry{
     public void deleteImage(Long index) {
         images.remove(index);
     }
-    @Column
-    Double location_x; // Longitude
-    @Column
-    Double location_y; // Latitude
+//    @Column
+//    Double location_x; // Longitude
+//    @Column
+//    Double location_y; // Latitude
     @Transient
     private double distance;
 //    private String description;
@@ -94,11 +94,11 @@ public class Product extends BaseEntiry{
         this.options = product.options;
         this.user_seq = product.user_seq;
         this.company = product.company;
-        this.location_x = product.location_x;
-        this.location_y = product.location_y;
+//        this.location_x = product.location_x;
+//        this.location_y = product.location_y;
     }
     @Builder
-    public Product (Long seq, String name, String title, String description, String options, Long user_seq, Company company, Double location_x, Double location_y) {
+    public Product (Long seq, String name, String title, String description, String options, Long user_seq, Company company) {//, Double location_x, Double location_y
         this.seq = seq;
         this.name = name;
         this.title = title;
@@ -106,8 +106,8 @@ public class Product extends BaseEntiry{
         this.options = options;
         this.user_seq = user_seq;
         this.company = company;
-        this.location_x = location_x;
-        this.location_y = location_y;
+//        this.location_x = location_x;
+//        this.location_y = location_y;
     }
     public Product() {
 

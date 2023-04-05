@@ -20,8 +20,8 @@ public class ProductDTO extends BaseEntiryDTO{// extends BaseEntiryDTO
     Long user_seq;
     //20230401 jay product 생성시 회사, 주소 연결
     Company company;
-    Double location_x;
-    Double location_y;
+//    Double location_x;
+//    Double location_y;
 
     @Builder
     public ProductDTO(Product product){
