@@ -34,12 +34,23 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 //    @Query(value = "SELECT u.seq as seq, (1+1) as distance FROM ds_product u ORDER BY distance", countQuery = "SELECT COUNT(*) FROM ds_product" , nativeQuery = true)
 //    @Query(value = "SELECT u.seq, u.title, u.description,u.options,u.location_x,u.location_y, u.user_seq, ( 3959 * acos( cos( radians(:location_y) ) * cos( radians( location_y ) ) * cos( radians( location_x ) - radians(:location_x) ) + sin( radians(:location_y) ) * sin( radians( location_y ) ) ) ) as distance FROM ds_product u ORDER BY distance", countQuery = "SELECT COUNT(*) FROM ds_product" , nativeQuery = true)
     //@Query(value = "SELECT u.seq, u.title, u.description, u.options, u.company.address.location_x as location_x, u.company.address.location_y as location_y, u.user_seq, ( 3959 * acos( cos( radians(:location_y) ) * cos( radians( location_y ) ) * cos( radians( location_x ) - radians(:location_x) ) + sin( radians(:location_y) ) * sin( radians( location_y ) ) ) ) as distance FROM ds_product u ORDER BY distance", countQuery = "SELECT COUNT(*) FROM ds_product" , nativeQuery = true)
-    // 20230405 jay 위치를 address 에 받아오게 수정
-    @Query(value = "SELECT u.seq, u.title, u.description, u.options, a.location_x, a.location_y, u.user_seq, " +
+// 20230405 jay 위치를 address 에 받아오게 수정
+//    @Query(value = "SELECT u.seq, u.title, u.description, u.options, a.location_x, a.location_y, u.user_seq, " +
+//            "( 3959 * acos( cos( radians(:location_y) ) * cos( radians( a.location_y ) ) * cos( radians( a.location_x ) - radians(:location_x) ) + sin( radians(:location_y) ) * sin( radians( a.location_y ) ) ) ) as distance " +
+//            "FROM ds_product u " +
+//            "INNER JOIN ds_company c ON u.company_seq = c.seq " +
+//            "INNER JOIN ds_address a ON c.address_seq = a.seq " +
+//            "ORDER BY distance",
+//            countQuery = "SELECT COUNT(*) FROM ds_product",
+//            nativeQuery = true)
+    // 20230406 jay url 추가
+    @Query(value = "SELECT u.seq, u.title, u.description, u.options, a.location_x, a.location_y, u.user_seq, i.url, i.name, " +
             "( 3959 * acos( cos( radians(:location_y) ) * cos( radians( a.location_y ) ) * cos( radians( a.location_x ) - radians(:location_x) ) + sin( radians(:location_y) ) * sin( radians( a.location_y ) ) ) ) as distance " +
             "FROM ds_product u " +
             "INNER JOIN ds_company c ON u.company_seq = c.seq " +
             "INNER JOIN ds_address a ON c.address_seq = a.seq " +
+            "LEFT JOIN ds_product_images pi ON u.seq = pi.ds_product_seq " +
+            "LEFT JOIN ds_image i ON pi.images_seq = i.seq " +
             "ORDER BY distance",
             countQuery = "SELECT COUNT(*) FROM ds_product",
             nativeQuery = true)
